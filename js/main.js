@@ -99,7 +99,7 @@ function addEvents(){
 	});
 	//function that causes a pop-up notification when the table is clicked on by a user
 	function clickme(){
-		
+
 		alert('Hey, you clicked me!');
 	};
 
@@ -108,3 +108,33 @@ function addEvents(){
 
 //call the initialize function when the document has loaded
 $(document).ready(initialize()); //debug: added a ')' for the initialize function to actually run
+
+//start lesson 3 (before debug, copied from 'debug_ajax.js'
+
+//callback function that will print our json file to the webpage
+function debugCallback(response){
+	$(mydiv).append('<br>GeoJSON data:<br> ' + JSON.stringify(response)); //debug: changed the stringify to 'response' so the JSON data is not undefined (pretty sure I'm supposed to return 'mydata' somewhere so I don't have to do it this way, but couldn't figure out how to get that to work)
+};
+
+//function that creates a variable to store the data receieved from the server
+function debugAjax(){
+	var mydata;
+	//ajax function that grabs our json file
+	$.ajax("data/MegaCities.geojson", {
+		dataType: "json",
+		success: function(response){ //on success of GET the specified json file, run this function
+			mydata = response; //debug: added this line so the callback function can use 'mydata' as a paramater, otherwise the paramter is only stored within this function (callback funciton wouldn't be able to access it)
+			//calls the debugCallback function to run using
+			debugCallback(mydata);
+		}
+	});
+	//line 133 runs undefined, unlike the same code in line 137, because mydata doesn't make it out of the GET function
+	console.log(mydata);//debug: commented out line below and added this to get the same undefined message in the console like the screenshot for deliverable example - not sure how to handle lines 133 and 137 if they are not meant to be removed
+	//$(mydiv).append('<br>GeoJSON data:<br>' + JSON.stringify(mydata));
+};
+
+//debug: commented out line below (137) - not sure if this is correct, but seems like this line prevents the other debug code from functioning at all
+//$(mydiv).append('GeoJSON data: ' + JSON.stringify(mydata));
+
+//calls the debugAjax function when the document has loaded
+$(document).ready(debugAjax); //debug: added to kickoff 'debugAjax()'
